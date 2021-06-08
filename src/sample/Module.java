@@ -36,41 +36,6 @@ public class Module implements Initializable {
     private DatePicker from,to;
     @FXML
     private Button summary,report;
-    @FXML
-    void getSummary(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
-        LocalDate fromDate = from.getValue();
-        LocalDate toDate = to.getValue();
-        if (circle.getValue() == null || fromDate == null || toDate == null || fromDate.isAfter(toDate) || network.getValue() == null
-                || module.getValue() == null) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText("Invalid Query");
-            errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
-            errorAlert.showAndWait();
-        }else{
-            ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
-            SqlQuery q = new SqlQuery();
-            String query = "select opening_date, count(*) from accounts where branch_id in\n" +
-                    "    (select branch_id from branches where ro_id in\n" +
-                    "        (select ro_id from ro where module_id = " + modMap.get(module.getValue()) + "))\n" +
-                    "and opening_date between '" + myDateFormat.format(fromDate) + "' and '" + myDateFormat.format(toDate)+"' group by opening_date";
-            System.out.println(query);
-            q.setQuery(query);
-            ResultSet rs = q.sql();
-            while (rs.next()){
-                AccountSummary a = new AccountSummary(rs.getString("OPENING_DATE").substring(0,10),rs.getInt("COUNT(*)"));
-                accounts.add(a);
-            }
-            SummaryController summaryController = new SummaryController(accounts);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("summary.fxml"));
-            fxmlLoader.setController(summaryController);
-            Parent root1 = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle(module.getValue()+" Summary");
-            stage.setScene(new Scene(root1,425,712));
-            stage.show();
-        }
-    }
-
 
     @FXML
     void setModule(ActionEvent event) {
@@ -112,6 +77,66 @@ public class Module implements Initializable {
                 e.printStackTrace();
             }
             network.setItems(netList);
+        }
+    }
+
+    @FXML
+    void getSummary(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
+        LocalDate fromDate = from.getValue();
+        LocalDate toDate = to.getValue();
+        if (circle.getValue() == null || fromDate == null || toDate == null || fromDate.isAfter(toDate) || network.getValue() == null
+                || module.getValue() == null) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid Query");
+            errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
+            errorAlert.showAndWait();
+        }else if(module.getValue().equals("All Modules")){
+            ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
+            SqlQuery q = new SqlQuery();
+            for(String s:modList){
+                String query = "select opening_date, count(*) from accounts where branch_id in\n" +
+                        "    (select branch_id from branches where ro_id in\n" +
+                        "        (select ro_id from ro where module_id = " + modMap.get(s) + "))\n" +
+                        "and opening_date between '" + myDateFormat.format(fromDate) + "' and '" + myDateFormat.format(toDate)+"' group by opening_date";
+                System.out.println(query);
+                q.setQuery(query);
+                ResultSet rs = q.sql();
+                while (rs.next()){
+                    AccountSummary a = new AccountSummary(rs.getString("OPENING_DATE").substring(0,10),rs.getInt("COUNT(*)"));
+                    accounts.add(a);
+                }
+            }
+            SummaryController summaryController = new SummaryController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("summary.fxml"));
+            fxmlLoader.setController(summaryController);
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle(network.getValue()+" "+module.getValue()+" Summary");
+            stage.setScene(new Scene(root1,425,712));
+            stage.show();
+        }
+        else{
+            ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
+            SqlQuery q = new SqlQuery();
+            String query = "select opening_date, count(*) from accounts where branch_id in\n" +
+                    "    (select branch_id from branches where ro_id in\n" +
+                    "        (select ro_id from ro where module_id = " + modMap.get(module.getValue()) + "))\n" +
+                    "and opening_date between '" + myDateFormat.format(fromDate) + "' and '" + myDateFormat.format(toDate)+"' group by opening_date";
+            System.out.println(query);
+            q.setQuery(query);
+            ResultSet rs = q.sql();
+            while (rs.next()){
+                AccountSummary a = new AccountSummary(rs.getString("OPENING_DATE").substring(0,10),rs.getInt("COUNT(*)"));
+                accounts.add(a);
+            }
+            SummaryController summaryController = new SummaryController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("summary.fxml"));
+            fxmlLoader.setController(summaryController);
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle(module.getValue()+" Summary");
+            stage.setScene(new Scene(root1,425,712));
+            stage.show();
         }
     }
 

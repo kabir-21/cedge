@@ -154,7 +154,7 @@ public class Branch implements Initializable {
             fxmlLoader.setController(summaryController);
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle(branch.getValue()+" Summary");
+            stage.setTitle(ro.getValue()+" "+branch.getValue()+" Summary");
             stage.setScene(new Scene(root1,425,712));
             stage.show();
         }

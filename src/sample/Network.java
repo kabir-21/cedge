@@ -45,7 +45,33 @@ public class Network implements Initializable {
             errorAlert.setHeaderText("Invalid Query");
             errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
             errorAlert.showAndWait();
-        }else{
+        }else if(network.getValue().equals("All Networks")){
+            ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
+            SqlQuery q = new SqlQuery();
+            for(String s:netList){
+                String query = "select opening_date, count(*) from accounts where branch_id in\n" +
+                        "    (select branch_id from branches where ro_id in\n" +
+                        "        (select ro_id from ro where module_id in \n" +
+                        "            (select module_id from modules where network_id = "+netMap.get(s)+")))\n" +
+                        "and opening_date between '"+myDateFormat.format(fromDate)+"' and '"+myDateFormat.format(toDate)+"' group by opening_date";
+                System.out.println(query);
+                q.setQuery(query);
+                ResultSet rs = q.sql();
+                while (rs.next()){
+                    AccountSummary a = new AccountSummary(rs.getString("OPENING_DATE").substring(0,10),rs.getInt("COUNT(*)"));
+                    accounts.add(a);
+                }
+            }
+            SummaryController summaryController = new SummaryController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("summary.fxml"));
+            fxmlLoader.setController(summaryController);
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle(circle.getValue()+" "+network.getValue()+" Summary");
+            stage.setScene(new Scene(root1,425,712));
+            stage.show();
+        }
+        else{
             ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
             SqlQuery q = new SqlQuery();
             String query = "select opening_date, count(*) from accounts where branch_id in\n" +
