@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Branch">
+        <children>
+            <ComboBox fx:id="circle" layoutX="15.0" layoutY="43.0" onAction="#setNetwork" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Circle" textAlignment="CENTER" />
+            <ComboBox fx:id="network" layoutX="15.0" layoutY="103.0" onAction="#setModule" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="74.0" prefHeight="29.0" prefWidth="152.0" text="Choose Network" textAlignment="CENTER" />
+            <ComboBox fx:id="module" layoutX="15.0" layoutY="170.0" onAction="#setRO" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="141.0" prefHeight="29.0" prefWidth="152.0" text="Choose Module" textAlignment="CENTER" />
+            <ComboBox fx:id="branch" layoutX="15.0" layoutY="296.0" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="267.0" prefHeight="29.0" prefWidth="152.0" text="Choose Branch" textAlignment="CENTER" />
+            <ComboBox fx:id="ro" layoutX="15.0" layoutY="236.0" onAction="#setBranch" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="207.0" prefHeight="29.0" prefWidth="152.0" text="Choose RO" textAlignment="CENTER" />
+            <Label alignment="CENTER" layoutX="463.0" layoutY="35.0" prefHeight="27.0" prefWidth="112.0" text="To Date" />
+            <Label alignment="CENTER" layoutX="307.0" layoutY="35.0" prefHeight="27.0" prefWidth="112.0" text="From Date" />
+            <DatePicker fx:id="to" layoutX="460.0" layoutY="70.0" prefHeight="31.0" prefWidth="119.0" />
+            <DatePicker fx:id="from" layoutX="302.0" layoutY="70.0" prefHeight="31.0" prefWidth="119.0" />
+            <Button fx:id="report" layoutX="458.0" layoutY="143.0" mnemonicParsing="false" onAction="#getReport" prefHeight="34.0" prefWidth="122.0" text="Get Report" />
+            <Button fx:id="summary" layoutX="302.0" layoutY="143.0" mnemonicParsing="false" onAction="#getSummary" prefHeight="34.0" prefWidth="121.0" text="Get Summary" />
+        </children>
+</AnchorPane>

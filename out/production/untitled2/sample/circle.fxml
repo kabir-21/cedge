@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Circle">
+        <children>
+            <ComboBox fx:id="circle" layoutX="27.0" layoutY="105.0" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="76.0" prefHeight="29.0" prefWidth="152.0" text="Choose Circle" textAlignment="CENTER" />
+            <Button fx:id="summary" layoutX="292.0" layoutY="133.0" mnemonicParsing="false" onAction="#getSummary" prefHeight="34.0" prefWidth="121.0" text="Get Summary" />
+            <Button fx:id="report" layoutX="448.0" layoutY="133.0" mnemonicParsing="false" onAction="#getReport" prefHeight="34.0" prefWidth="122.0" text="Get Report" />
+            <DatePicker fx:id="from" layoutX="292.0" layoutY="60.0" prefHeight="31.0" prefWidth="119.0" />
+            <DatePicker fx:id="to" layoutX="450.0" layoutY="60.0" prefHeight="31.0" prefWidth="119.0" />
+            <Label alignment="CENTER" layoutX="297.0" layoutY="25.0" prefHeight="27.0" prefWidth="112.0" text="From Date" />
+            <Label alignment="CENTER" layoutX="453.0" layoutY="25.0" prefHeight="27.0" prefWidth="112.0" text="To Date" />
+        </children>
+    </AnchorPane>

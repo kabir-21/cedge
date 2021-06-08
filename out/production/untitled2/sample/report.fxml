@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"> <!--fx:controller="sample.ReportController"-->
+   <children>
+      <TableView fx:id="table" layoutX="25.0" layoutY="151.0" prefHeight="635.0" prefWidth="1091.0">
+         <columns>
+            <TableColumn fx:id="accID" prefWidth="273.0" text="Account ID" />
+            <TableColumn fx:id="opDate" prefWidth="183.0" text="Opening Date" />
+            <TableColumn fx:id="accType" minWidth="0.0" prefWidth="199.0" text="Account Type" />
+            <TableColumn fx:id="branch" prefWidth="211.0" text="Branch ID" />
+            <TableColumn fx:id="name" prefWidth="223.0" text="Merchant Name" />
+         </columns></TableView>
+   </children>
+</AnchorPane>
