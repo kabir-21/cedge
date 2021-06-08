@@ -42,6 +42,7 @@ public class Ro implements Initializable {
 
     @FXML
     void setNetwork(ActionEvent event) {
+        netMap = new HashMap<>();
         if(circle.getValue()!=null){
             netList = FXCollections.observableArrayList();
             SqlQuery q2 = new SqlQuery();
@@ -62,6 +63,7 @@ public class Ro implements Initializable {
 
     @FXML
     void setModule(ActionEvent event) {
+        modMap = new HashMap<>();
         if(network.getValue()!=null){
             modList = FXCollections.observableArrayList();
             SqlQuery q2 = new SqlQuery();
@@ -81,6 +83,7 @@ public class Ro implements Initializable {
 
     @FXML
     void setRO(ActionEvent event) {
+        roMap = new HashMap<>();
         if(module.getValue()!=null){
             roList = FXCollections.observableArrayList();
             SqlQuery q2 = new SqlQuery();
@@ -94,7 +97,9 @@ public class Ro implements Initializable {
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
-            ro.setItems(roList);
+            ObservableList<String> withAll = FXCollections.observableArrayList();
+            withAll.addAll(roList); withAll.add("All ROs");
+            ro.setItems(withAll);
         }
     }
 
@@ -142,7 +147,31 @@ public class Ro implements Initializable {
             errorAlert.setHeaderText("Invalid Query");
             errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
             errorAlert.showAndWait();
-        } else {
+        }else if(ro.getValue().equals("All Ros")) {
+            ObservableList<Account> accounts = FXCollections.observableArrayList();
+            SqlQuery q = new SqlQuery();
+            for(String s:roList){
+                String query = "select * from accounts where branch_id in\n" +
+                        "    (select branch_id from branches where ro_id = " + roMap.get(s) + ")" +
+                        "and opening_date between '" + myDateFormat.format(fromDate) + "' and '" + myDateFormat.format(toDate) + "'";
+                q.setQuery(query);
+                ResultSet rs = q.sql();
+                while (rs.next()) {
+                    Account a = new Account(rs.getString("ACCOUNT_ID"),rs.getString("OPENING_DATE").substring(0,10),rs.getString("ACCOUNT_TYPE"),
+                            rs.getString("BRANCH_ID"),rs.getString("MERCHANT_NAME"));
+                    accounts.add(a);
+                }
+            }
+            ReportController rep = new ReportController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("report.fxml"));
+            fxmlLoader.setController(rep);
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle(ro.getValue() + " Report");
+            stage.setScene(new Scene(root1,1526,807));
+            stage.show();
+        }
+        else {
             ObservableList<Account> accounts = FXCollections.observableArrayList();
             SqlQuery q = new SqlQuery();
             String query = "select * from accounts where branch_id in\n" +
