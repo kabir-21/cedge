@@ -1,39 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="771.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <tabs>
 
-      <Tab text ="Bank Analysis">
+      <Tab text="Bank Analysis">
          <content>
-            <fx:include source="bank.fxml"/>
+            <fx:include source="bank.fxml" />
          </content>
       </Tab>
       <Tab text="Circle Analysis">
          <content>
-      <fx:include source="circle.fxml"/>
+      <fx:include source="circle.fxml" />
          </content>
       </Tab>
       <Tab closable="false" text="Network Analysis">
          <content>
-         <fx:include source="network.fxml"/>
+         <fx:include source="network.fxml" />
          </content>
       </Tab>
       <Tab text="Module Analysis">
          <content>
-         <fx:include source="module.fxml"/>
+         <fx:include source="module.fxml" />
          </content>
 
       </Tab>
       <Tab text="RO Analysis">
          <content>
-         <fx:include source="ro.fxml"/>
+         <fx:include source="ro.fxml" />
          </content>
       </Tab>
       <Tab text="Branch Analysis">
          <content>
-         <fx:include source="branch.fxml"/>
+         <fx:include source="branch.fxml" />
          </content>
+      </Tab>
+      <Tab text="Charts  ">
+        <content>
+          <fx:include source="chart.fxml" />
+        </content>
       </Tab>
    </tabs>
 </TabPane>
