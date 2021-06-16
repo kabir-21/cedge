@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="180.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Branch">
+<AnchorPane prefHeight="180.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Branch_Report">
         <children>
             <ComboBox fx:id="circle" layoutX="15.0" layoutY="43.0" onAction="#setNetwork" prefWidth="150.0" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Circle" textAlignment="CENTER" />

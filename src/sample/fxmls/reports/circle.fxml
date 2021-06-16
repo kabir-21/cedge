@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="273.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Circle">
+<AnchorPane prefHeight="273.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Circle_Report">
         <children>
             <ComboBox fx:id="circle" layoutX="375.0" layoutY="50.0" prefWidth="150.0" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="374.0" layoutY="21.0" prefHeight="29.0" prefWidth="152.0" text="Choose Circle" textAlignment="CENTER" />

@@ -6,26 +6,22 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
-import java.sql.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
 public class DetailedReportController {
     DateTimeFormatter myDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    public ObservableList<Account> accounts = FXCollections.observableArrayList();
-    HashMap<String,TableColumn<Account,?>> columnsMap = new HashMap<>();
-    FilteredList<Account> filteredObjects;
-    SortedList<Account> sortedObjects;
-    ObservableList<TableColumn<Account,?>> colList;
+    public ObservableList<AccountDetailedReport> accounts = FXCollections.observableArrayList();
+    HashMap<String,TableColumn<AccountDetailedReport,?>> columnsMap = new HashMap<>();
+    FilteredList<AccountDetailedReport> filteredObjects;
+    SortedList<AccountDetailedReport> sortedObjects;
+    ObservableList<TableColumn<AccountDetailedReport,?>> colList;
     ObservableList<String> removableList;
 
-    DetailedReportController(ObservableList<Account> accounts){
+    DetailedReportController(ObservableList<AccountDetailedReport> accounts){
         this.accounts = accounts;
     }
     @FXML
@@ -33,11 +29,11 @@ public class DetailedReportController {
     @FXML
     private ComboBox<String> columnRemover;
     @FXML
-    private TableView<Account> table;
+    private TableView<AccountDetailedReport> table;
     @FXML
     private TextField aType,bID,aID,oD,mName;
     @FXML
-    private TableColumn<Account, String> name,opDate,accType,accID,branch;
+    private TableColumn<AccountDetailedReport, String> name,opDate,accType,accID,branch;
 //    @FXML
 //    private TableColumn<Account,Number> accID,branch;
     @FXML
@@ -62,7 +58,7 @@ public class DetailedReportController {
         table.setItems(sortedObjects);
         colList = table.getColumns();
         removableList = FXCollections.observableArrayList();
-        for(TableColumn<Account,?> col: colList){
+        for(TableColumn<AccountDetailedReport,?> col: colList){
             columnsMap.put(col.getText(), col);
             removableList.add(col.getText());
         }

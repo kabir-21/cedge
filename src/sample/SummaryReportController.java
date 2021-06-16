@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,9 +12,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class SummaryReportController {
-    public ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
-    FilteredList<AccountSummary> filteredObjects;
-    SortedList<AccountSummary> sortedObjects;
+    public ObservableList<AccountSummaryReport> accounts = FXCollections.observableArrayList();
+    FilteredList<AccountSummaryReport> filteredObjects;
+    SortedList<AccountSummaryReport> sortedObjects;
     @FXML
     private TextField filter;
 
@@ -23,15 +22,15 @@ public class SummaryReportController {
     private Button reset;
 
     @FXML
-    private TableColumn<AccountSummary, String> summaryOpeningDate;
+    private TableColumn<AccountSummaryReport, String> summaryOpeningDate;
     @FXML
-    private TableColumn<AccountSummary, Number> numAccounts;
+    private TableColumn<AccountSummaryReport, Number> numAccounts;
 
     @FXML
-    private TableView<AccountSummary> summaryTable;
+    private TableView<AccountSummaryReport> summaryTable;
 
 
-    public SummaryReportController(ObservableList<AccountSummary> accounts) {
+    public SummaryReportController(ObservableList<AccountSummaryReport> accounts) {
         this.accounts = accounts;
     }
 
@@ -46,7 +45,7 @@ public class SummaryReportController {
         sortedObjects.comparatorProperty().bind(summaryTable.comparatorProperty());
         summaryTable.setItems(sortedObjects);
 
-        FilteredList<AccountSummary> filteredList = new FilteredList<>(accounts,b->true);
+        FilteredList<AccountSummaryReport> filteredList = new FilteredList<>(accounts, b->true);
         filter.textProperty().addListener(((observableValue, old, newVal) -> {
             filteredList.setPredicate(account->{
                 if(newVal == null || newVal.isEmpty())

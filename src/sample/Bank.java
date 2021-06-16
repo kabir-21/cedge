@@ -19,21 +19,14 @@ abstract class Bank implements Initializable {
     protected DateTimeFormatter myDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @FXML
     protected Button summary,report;
-
     @FXML
     protected ComboBox<String> bank;
-
     @FXML
     protected DatePicker from,to;
-
     @FXML
-    protected void getSummary(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
-    }
-
+    protected void getSummary(ActionEvent event) throws SQLException, ClassNotFoundException, IOException { }
     @FXML
-    protected void getReport(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
-    }
-
+    protected void getReport(ActionEvent event) throws IOException, SQLException, ClassNotFoundException { }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bankList.add("Bank1");

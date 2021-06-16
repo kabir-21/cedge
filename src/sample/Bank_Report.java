@@ -24,7 +24,7 @@ public class Bank_Report extends Bank{
             errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
             errorAlert.showAndWait();
         }else{
-            ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
+            ObservableList<AccountSummaryReport> accounts = FXCollections.observableArrayList();
             SqlQuery q = new SqlQuery();
             String query = "select opening_date, count(*) from accounts"+
                     " where opening_date between '"+myDateFormat.format(fromDate)+"' and '"
@@ -33,7 +33,7 @@ public class Bank_Report extends Bank{
             q.setQuery(query);
             ResultSet rs = q.sql();
             while (rs.next()){
-                AccountSummary a = new AccountSummary(rs.getString("OPENING_DATE").substring(0,10),rs.getInt("COUNT(*)"));
+                AccountSummaryReport a = new AccountSummaryReport(rs.getString("OPENING_DATE").substring(0,10),rs.getInt("COUNT(*)"));
                 accounts.add(a);
             }
             SummaryReportController summaryController = new SummaryReportController(accounts);
@@ -57,7 +57,7 @@ public class Bank_Report extends Bank{
             errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
             errorAlert.showAndWait();
         }else{
-            ObservableList<Account> accounts = FXCollections.observableArrayList();
+            ObservableList<AccountDetailedReport> accounts = FXCollections.observableArrayList();
             SqlQuery q = new SqlQuery();
             String query = "select * from accounts "
                     +"where opening_date between '"+myDateFormat.format(fromDate)+"' and '"
@@ -65,7 +65,7 @@ public class Bank_Report extends Bank{
             q.setQuery(query);
             ResultSet rs = q.sql();
             while (rs.next()){
-                Account a = new Account(rs.getString("ACCOUNT_ID"),rs.getString("OPENING_DATE").substring(0,10),rs.getString("ACCOUNT_TYPE"),
+                AccountDetailedReport a = new AccountDetailedReport(rs.getString("ACCOUNT_ID"),rs.getString("OPENING_DATE").substring(0,10),rs.getString("ACCOUNT_TYPE"),
                         rs.getString("BRANCH_ID"),rs.getString("MERCHANT_NAME"));
                 accounts.add(a);
             }
