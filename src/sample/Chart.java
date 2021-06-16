@@ -130,7 +130,7 @@ public class Chart implements Initializable {
                 dataSeries.getData().add(data);
             }
             BarGraphController graphController = new BarGraphController(x,y,seriesArr,max,"Month Number","Number of Accounts");
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BarGraph.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
             fxmlLoader.setController(graphController);
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();

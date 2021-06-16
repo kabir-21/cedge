@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <tabs>
+
+        <Tab text="Bank">
+            <content>
+                <fx:include source="../graphs/bank.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Circle">
+            <content>
+                <fx:include source="../graphs/circle.fxml" />
+            </content>
+        </Tab>
+        <Tab closable="false" text="Network">
+            <content>
+                <fx:include source="../graphs/network.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Module">
+            <content>
+                <fx:include source="../graphs/module.fxml" />
+            </content>
+
+        </Tab>
+        <Tab text="RO">
+            <content>
+                <fx:include source="../graphs/ro.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Branch">
+            <content>
+                <fx:include source="../graphs/branch.fxml" />
+            </content>
+        </Tab>
+<!--        <Tab text="Charts">-->
+<!--            <content>-->
+<!--                <fx:include source="../chart.fxml" />-->
+<!--            </content>-->
+<!--        </Tab>-->
+    </tabs>
+</TabPane>

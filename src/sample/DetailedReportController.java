@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class ReportController {
+public class DetailedReportController {
     DateTimeFormatter myDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     public ObservableList<Account> accounts = FXCollections.observableArrayList();
     HashMap<String,TableColumn<Account,?>> columnsMap = new HashMap<>();
@@ -25,7 +25,7 @@ public class ReportController {
     ObservableList<TableColumn<Account,?>> colList;
     ObservableList<String> removableList;
 
-    ReportController(ObservableList<Account> accounts){
+    DetailedReportController(ObservableList<Account> accounts){
         this.accounts = accounts;
     }
     @FXML

@@ -62,8 +62,8 @@ public class Network implements Initializable {
                     accounts.add(a);
                 }
             }
-            SummaryController summaryController = new SummaryController(accounts);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("summary.fxml"));
+            SummaryReportController summaryController = new SummaryReportController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/reports/summaryReport.fxml"));
             fxmlLoader.setController(summaryController);
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
@@ -86,8 +86,8 @@ public class Network implements Initializable {
                 AccountSummary a = new AccountSummary(rs.getString("OPENING_DATE").substring(0,10),rs.getInt("COUNT(*)"));
                 accounts.add(a);
             }
-            SummaryController summaryController = new SummaryController(accounts);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("summary.fxml"));
+            SummaryReportController summaryController = new SummaryReportController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/reports/summaryReport.fxml"));
             fxmlLoader.setController(summaryController);
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
@@ -124,8 +124,8 @@ public class Network implements Initializable {
                     accounts.add(a);
                 }
             }
-            ReportController rep = new ReportController(accounts);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("report.fxml"));
+            DetailedReportController rep = new DetailedReportController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/reports/detailedReport.fxml"));
             fxmlLoader.setController(rep);
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
@@ -148,8 +148,8 @@ public class Network implements Initializable {
                         rs.getString("BRANCH_ID"),rs.getString("MERCHANT_NAME"));
                 accounts.add(a);
             }
-            ReportController rep = new ReportController(accounts);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("report.fxml"));
+            DetailedReportController rep = new DetailedReportController(accounts);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/reports/detailedReport.fxml"));
             fxmlLoader.setController(rep);
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();

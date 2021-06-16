@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Accordion maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <panes>
+    <TitledPane animated="false" text="Report">
+      <content>
+        <fx:include source="reports/REPORT.fxml" />
+      </content>
+    </TitledPane>
+    <TitledPane animated="false" text="Graphs">
+      <content>
+          <fx:include source="graphs/GRAPH.fxml" />
+      </content>
+    </TitledPane>
+  </panes>
+</Accordion>

@@ -12,7 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class SummaryController {
+public class SummaryReportController {
     public ObservableList<AccountSummary> accounts = FXCollections.observableArrayList();
     FilteredList<AccountSummary> filteredObjects;
     SortedList<AccountSummary> sortedObjects;
@@ -31,7 +31,7 @@ public class SummaryController {
     private TableView<AccountSummary> summaryTable;
 
 
-    public SummaryController(ObservableList<AccountSummary> accounts) {
+    public SummaryReportController(ObservableList<AccountSummary> accounts) {
         this.accounts = accounts;
     }
 

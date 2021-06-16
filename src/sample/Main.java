@@ -8,23 +8,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.sql.*;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class Main extends Application {
     public static ObservableList<String> circlesList = FXCollections.observableArrayList();
     public static HashMap<String, Integer> circleMap = new HashMap<>();
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("fxmls/Menu.fxml"));
         primaryStage.setTitle("C-EDGE");
-        primaryStage.setScene(new Scene(root, 771, 400));
+        primaryStage.setScene(new Scene(root, 900, 330));
         primaryStage.show();
     }
 
