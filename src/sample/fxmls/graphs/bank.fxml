@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="180.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Bank_Report">
+<AnchorPane prefHeight="180.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Bank_Graph">
     <children>
         <ComboBox fx:id="bank" layoutX="280.0" layoutY="51.0" prefWidth="150.0" />
         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="279.0" layoutY="22.0" prefHeight="29.0" prefWidth="152.0" text="Choose Bank" textAlignment="CENTER" />
