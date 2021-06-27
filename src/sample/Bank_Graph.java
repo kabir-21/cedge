@@ -31,7 +31,7 @@ import java.util.ResourceBundle;
 
 public class Bank_Graph extends Bank{
     @FXML
-    private ComboBox<String> type;
+    private ComboBox<String> type,period;
     @Override
     //for pie chart
     protected void getSummary(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
@@ -47,16 +47,16 @@ public class Bank_Graph extends Bank{
             errorAlert.setHeaderText("Invalid Query");
             errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
             errorAlert.showAndWait();
-        }else if(type.getValue()==null){
+        }else if(type.getValue()==null || period.getValue()==null){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText("Graph Type not selected");
+            errorAlert.setHeaderText("Graph Type or Period not selected");
             errorAlert.showAndWait();
         }else{
             if(type.getValue().equals("Date-Wise")){
                 Period pd = Period.between(fromDate,toDate);
                 System.out.println(pd.getDays()+" "+ pd.getMonths()+" "+ pd.getYears());
                 final String s = "Number of Accounts in date range: " + fromDate.toString().substring(0, 10) + " and " + toDate.toString().substring(0, 10);
-                if(pd.getYears()>=1 || pd.getMonths()>3){ //for monthwise
+                if(period.getValue().equals("Monthly")){ //for monthwise
                     CategoryAxis x = new CategoryAxis();
                     x.setLabel("Month Number");
                     NumberAxis y = new NumberAxis();
@@ -78,11 +78,9 @@ public class Bank_Graph extends Bank{
                         max = Math.max(max,rs.getInt("COUNT"));
     //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
                         final XYChart.Data<String,Number> data = new XYChart.Data<>(rs.getString("MONTH"),rs.getInt("COUNT"));
-                        data.nodeProperty().addListener(new ChangeListener<Node>() {
-                            @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-                                if (node != null) {
-                                    displayLabelForData(data);
-                                }
+                        data.nodeProperty().addListener((ov, oldNode, node) -> {
+                            if (node != null) {
+                                displayLabelForData(data);
                             }
                         });
                         dataSeries.getData().add(data);
@@ -96,7 +94,7 @@ public class Bank_Graph extends Bank{
                     stage.setScene(new Scene(root1,425,712));
                     stage.show();
                 }
-                else if(pd.getMonths()>0 || (pd.getDays()<30 && pd.getDays()>=14)){ // for weekwise
+                else if(period.getValue().equals("Weekly")){ // for weekwise
                     CategoryAxis x = new CategoryAxis();
                     x.setLabel("Week Number");
                     NumberAxis y = new NumberAxis();
@@ -118,11 +116,9 @@ public class Bank_Graph extends Bank{
                         max = Math.max(max,rs.getInt("COUNT"));
                         //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
                         final XYChart.Data<String,Number> data = new XYChart.Data<>(""+cnt++,rs.getInt("COUNT"));
-                        data.nodeProperty().addListener(new ChangeListener<Node>() {
-                            @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-                                if (node != null) {
-                                    displayLabelForData(data);
-                                }
+                        data.nodeProperty().addListener((ov, oldNode, node) -> {
+                            if (node != null) {
+                                displayLabelForData(data);
                             }
                         });
                         dataSeries.getData().add(data);
@@ -135,7 +131,7 @@ public class Bank_Graph extends Bank{
                     stage.setTitle(bank.getValue()+" Detailed Report Graph");
                     stage.setScene(new Scene(root1,425,712));
                     stage.show();
-                }else if(pd.getDays()<14){//for daywise
+                }else if(period.getValue().equals("Daily")){//for daywise
                     CategoryAxis x = new CategoryAxis();
                     x.setLabel("Date");
                     NumberAxis y = new NumberAxis();
@@ -161,11 +157,9 @@ public class Bank_Graph extends Bank{
                         String d = rs.getString("DD")+"-"+rs.getString("MM")+"-"+rs.getString("YY");
                         //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
                         final XYChart.Data<String,Number> data = new XYChart.Data<>(d,rs.getInt("COUNT"));
-                        data.nodeProperty().addListener(new ChangeListener<Node>() {
-                            @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-                                if (node != null) {
-                                    displayLabelForData(data);
-                                }
+                        data.nodeProperty().addListener((ov, oldNode, node) -> {
+                            if (node != null) {
+                                displayLabelForData(data);
                             }
                         });
                         dataSeries.getData().add(data);
@@ -213,5 +207,7 @@ public class Bank_Graph extends Bank{
         bank.setItems(bankList);
         ObservableList<String> types = FXCollections.observableArrayList("Date-Wise","Acc Type + Date-Wise");
         type.setItems(types);
+        ObservableList<String> periods = FXCollections.observableArrayList("Monthly","Weekly","Daily");
+        period.setItems(periods);
     }
 }

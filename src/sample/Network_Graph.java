@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -27,7 +26,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class Circle_Graph extends Circle{
+public class Network_Graph extends Network{
     @FXML
     private ComboBox<String> type,period;
     @Override
@@ -40,7 +39,7 @@ public class Circle_Graph extends Circle{
     protected void getReport(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         LocalDate fromDate = from.getValue();
         LocalDate toDate = to.getValue();
-        if(circle.getValue()==null || fromDate == null || toDate == null || fromDate.isAfter(toDate)){
+        if(circle.getValue()==null || fromDate == null || toDate == null || fromDate.isAfter(toDate) || network.getValue()==null){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Invalid Query");
             errorAlert.setContentText("Possible Errors:\n1. Invalid Date Selection\n2. Invalid Field Selection");
@@ -65,17 +64,18 @@ public class Circle_Graph extends Circle{
                     seriesArr.add(dataSeries);
                     SqlQuery query = new SqlQuery();
                     int max = Integer.MIN_VALUE;
-                    if(circle.getValue().equals("All Circles")){
+                    if(network.getValue().equals("All Networks")){
                         StringBuilder tempQ = new StringBuilder("SELECT extract(month from Opening_date) as MONTH, count(*) as COUNT\n" +
                                 "FROM accounts where branch_id in\n" +
                                 "    (select branch_id from branches where ro_id in \n" +
                                 "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id in \n" +
-                                "                    (select network_id from networks where circle_id = 1");
-                        for(int i=2;i<=17;i++){
-                            tempQ.append(" or circle_id = ").append(i);
+                                "                (select module_id from modules where network_id = ");
+                        for(int i=0;i<netList.size();i++){
+                            tempQ.append(netMap.get(netList.get(i)));
+                            if(i!=netList.size()-1)
+                                tempQ.append(" or network_id = ");
                         }
-                        tempQ.append(")))) and opening_date between '").append(myDateFormat.format(fromDate)).append("' and '")
+                        tempQ.append("))) and opening_date between '").append(myDateFormat.format(fromDate)).append("' and '")
                                 .append(myDateFormat.format(toDate)).append("'\n")
                                 .append("GROUP BY extract(month from Opening_date)\n").append("order by MONTH asc");
                         query.setQuery(tempQ.toString());
@@ -95,9 +95,8 @@ public class Circle_Graph extends Circle{
                                 "FROM accounts where branch_id in\n" +
                                 "    (select branch_id from branches where ro_id in \n" +
                                 "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id in \n" +
-                                "                    (select network_id from networks where circle_id = " +
-                                (map.get(circle.getValue())) + ")))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                "                (select module_id from modules where network_id = " +
+                                (netMap.get(network.getValue())) + "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
                                 + myDateFormat.format(toDate) + "'\n" +
                                 "GROUP BY extract(month from Opening_date)\n" +
                                 "order by MONTH asc");
@@ -105,14 +104,10 @@ public class Circle_Graph extends Circle{
                         ResultSet rs = query.sql();
                         while (rs.next()) {
                             max = Math.max(max, rs.getInt("COUNT"));
-                            //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
                             final XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString("MONTH"), rs.getInt("COUNT"));
-                            data.nodeProperty().addListener(new ChangeListener<Node>() {
-                                @Override
-                                public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-                                    if (node != null) {
-                                        displayLabelForData(data);
-                                    }
+                            data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                if (node != null) {
+                                    displayLabelForData(data);
                                 }
                             });
                             dataSeries.getData().add(data);
@@ -123,7 +118,7 @@ public class Circle_Graph extends Circle{
                     fxmlLoader.setController(graphController);
                     Parent root1 = fxmlLoader.load();
                     Stage stage = new Stage();
-                    stage.setTitle(circle.getValue()+" Detailed Report Graph");
+                    stage.setTitle(network.getValue()+" Detailed Report Graph");
                     stage.setScene(new Scene(root1,425,712));
                     stage.show();
                 }
@@ -138,17 +133,18 @@ public class Circle_Graph extends Circle{
                     seriesArr.add(dataSeries);
                     int max = Integer.MIN_VALUE;
                     SqlQuery query = new SqlQuery();
-                    if(circle.getValue().equals("All Circles")){
+                    if(network.getValue().equals("All Networks")){
                         StringBuilder tempQ = new StringBuilder("select to_char(opening_date, 'IW') as WEEK, count(Account_Id) as COUNT\n" +
                                 "from accounts where branch_id in\n" +
                                 "    (select branch_id from branches where ro_id in \n" +
                                 "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id in \n" +
-                                "                    (select network_id from networks where circle_id = 1");
-                        for(int i=2;i<=17;i++){
-                            tempQ.append(" or circle_id = ").append(i);
+                                "                (select module_id from modules where network_id = ");
+                        for(int i=0;i<netList.size();i++){
+                            tempQ.append(netMap.get(netList.get(i)));
+                            if(i!=netList.size()-1)
+                                tempQ.append(" or network_id = ");
                         }
-                        tempQ.append(")))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                        tempQ.append("))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
                                 + myDateFormat.format(toDate) + "'\n" +
                                 "group by to_char(opening_date, 'IW')");
                         query.setQuery(tempQ.toString());
@@ -170,7 +166,7 @@ public class Circle_Graph extends Circle{
                         fxmlLoader.setController(graphController);
                         Parent root1 = fxmlLoader.load();
                         Stage stage = new Stage();
-                        stage.setTitle(circle.getValue() + " Detailed Report Graph");
+                        stage.setTitle(network.getValue() + " Detailed Report Graph");
                         stage.setScene(new Scene(root1, 425, 712));
                         stage.show();
                     }else {
@@ -178,9 +174,8 @@ public class Circle_Graph extends Circle{
                                 "from accounts where branch_id in\n" +
                                 "    (select branch_id from branches where ro_id in \n" +
                                 "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id in \n" +
-                                "                    (select network_id from networks where circle_id = " +
-                                (map.get(circle.getValue())) + ")))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                "                (select module_id from modules where network_id in = " +
+                                (netMap.get(network.getValue())) + "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
                                 + myDateFormat.format(toDate) + "'\n" +
                                 "group by to_char(opening_date, 'IW')");
                         System.out.println(query.getQuery());
@@ -188,7 +183,6 @@ public class Circle_Graph extends Circle{
                         int cnt = 1;
                         while (rs.next()) {
                             max = Math.max(max, rs.getInt("COUNT"));
-                            //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
                             final XYChart.Data<String, Number> data = new XYChart.Data<>("" + cnt++, rs.getInt("COUNT"));
                             data.nodeProperty().addListener((ov, oldNode, node) -> {
                                 if (node != null) {
@@ -202,7 +196,7 @@ public class Circle_Graph extends Circle{
                         fxmlLoader.setController(graphController);
                         Parent root1 = fxmlLoader.load();
                         Stage stage = new Stage();
-                        stage.setTitle(circle.getValue() + " Detailed Report Graph");
+                        stage.setTitle(network.getValue() + " Detailed Report Graph");
                         stage.setScene(new Scene(root1, 425, 712));
                         stage.show();
                     }
@@ -217,18 +211,19 @@ public class Circle_Graph extends Circle{
                     ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
                     seriesArr.add(dataSeries);
                     SqlQuery query = new SqlQuery();
-                    if (circle.getValue().equals("All Circles")){
+                    if (network.getValue().equals("All Networks")){
                         StringBuilder tempQ = new StringBuilder("SELECT extract(year from opening_date) as YY, extract(month from opening_date) as MM, \n" +
                                 "extract(day from opening_date) as DD, count(*) as COUNT\n" +
                                 "FROM accounts where branch_id in\n" +
                                 "    (select branch_id from branches where ro_id in \n" +
                                 "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id in \n" +
-                                "                    (select network_id from networks where circle_id = 1");
-                        for(int i=2;i<=17;i++){
-                            tempQ.append(" or circle_id = ").append(i);
+                                "                (select module_id from modules where network_id = ");
+                        for(int i=0;i<netList.size();i++){
+                            tempQ.append(netMap.get(netList.get(i)));
+                            if(i!=netList.size()-1)
+                                tempQ.append(" or network_id = ");
                         }
-                        tempQ.append("\n)))) and opening_date between '").append(myDateFormat.format(fromDate))
+                        tempQ.append("\n))) and opening_date between '").append(myDateFormat.format(fromDate))
                                 .append("' and '").append(myDateFormat.format(toDate)).append("'\n")
                                 .append("GROUP BY extract(year from opening_date), extract(month from opening_date), \n")
                                 .append("extract(day from opening_date)\n").append("order by yy asc\n");
@@ -252,7 +247,7 @@ public class Circle_Graph extends Circle{
                         fxmlLoader.setController(graphController);
                         Parent root1 = fxmlLoader.load();
                         Stage stage = new Stage();
-                        stage.setTitle(circle.getValue() + " Detailed Report Graph");
+                        stage.setTitle(network.getValue() + " Detailed Report Graph");
                         stage.setScene(new Scene(root1, 425, 712));
                         stage.show();
                     }else {
@@ -261,10 +256,10 @@ public class Circle_Graph extends Circle{
                                 "FROM accounts where branch_id in\n" +
                                 "    (select branch_id from branches where ro_id in \n" +
                                 "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id in \n" +
-                                "                    (select network_id from networks where circle_id = " +
-                                (map.get(circle.getValue())) +
-                                ")))) and opening_date between '"+myDateFormat.format(fromDate)+"' and '"+myDateFormat.format(fromDate)+"'\n" +
+                                "                (select module_id from modules where network_id = " +
+                                (netMap.get(network.getValue())) +
+                                "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                + myDateFormat.format(toDate) +
                                 "GROUP BY extract(year from opening_date), extract(month from opening_date), \n" +
                                 "extract(day from opening_date)\n" +
                                 "order by yy asc");
@@ -274,7 +269,6 @@ public class Circle_Graph extends Circle{
                         while (rs.next()) {
                             max = Math.max(max, rs.getInt("COUNT"));
                             String d = rs.getString("DD") + "-" + rs.getString("MM") + "-" + rs.getString("YY");
-                            //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
                             final XYChart.Data<String, Number> data = new XYChart.Data<>(d, rs.getInt("COUNT"));
                             data.nodeProperty().addListener((ov, oldNode, node) -> {
                                 if (node != null) {
@@ -288,7 +282,7 @@ public class Circle_Graph extends Circle{
                         fxmlLoader.setController(graphController);
                         Parent root1 = fxmlLoader.load();
                         Stage stage = new Stage();
-                        stage.setTitle(circle.getValue() + " Detailed Report Graph");
+                        stage.setTitle(network.getValue() + " Detailed Report Graph");
                         stage.setScene(new Scene(root1, 425, 712));
                         stage.show();
                     }
@@ -317,15 +311,10 @@ public class Circle_Graph extends Circle{
             );
         });
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ObservableList<String> withAll = FXCollections.observableArrayList();
-        for(int i=1;i<=Main.circlesList.size();i++){
-            map.put(Main.circlesList.get(i-1),i);
-            withAll.add(Main.circlesList.get(i-1));
-        }
-        withAll.add("All Circles");
-        circle.setItems(withAll);
+        circle.setItems(Main.circlesList);
         ObservableList<String> types = FXCollections.observableArrayList("Date-Wise","Acc Type + Date-Wise");
         type.setItems(types);
         ObservableList<String> periods = FXCollections.observableArrayList("Monthly","Weekly","Daily");

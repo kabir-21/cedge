@@ -18,7 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("fxmls/Menu.fxml"));
         primaryStage.setTitle("C-EDGE");
-        primaryStage.setScene(new Scene(root, 900, 330));
+        primaryStage.setScene(new Scene(root, 1200, 330));
         primaryStage.show();
     }
 
@@ -30,7 +30,6 @@ public class Main extends Application {
             circlesList.add(rs.getString(2));
             circleMap.put(rs.getString(2),rs.getInt(1));
         }
-//        System.out.println(Mac.getMac());
         launch(args);
     }
 }
