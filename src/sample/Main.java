@@ -9,14 +9,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Main extends Application {
+    public static ArrayList<String> accountType = new ArrayList<>();
     public static ObservableList<String> circlesList = FXCollections.observableArrayList();
     public static HashMap<String, Integer> circleMap = new HashMap<>();
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("fxmls/Menu.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxmls/Menu.fxml")));
         primaryStage.setTitle("C-EDGE");
         primaryStage.setScene(new Scene(root, 1200, 330));
         primaryStage.show();
@@ -30,6 +33,10 @@ public class Main extends Application {
             circlesList.add(rs.getString(2));
             circleMap.put(rs.getString(2),rs.getInt(1));
         }
+        q.setQuery("select distinct account_type from accounts");
+        rs = q.sql();
+        while (rs.next())
+            accountType.add(rs.getString("ACCOUNT_TYPE"));
         launch(args);
     }
 }

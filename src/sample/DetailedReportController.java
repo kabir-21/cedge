@@ -9,11 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class DetailedReportController {
-    DateTimeFormatter myDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     public ObservableList<AccountDetailedReport> accounts = FXCollections.observableArrayList();
     HashMap<String,TableColumn<AccountDetailedReport,?>> columnsMap = new HashMap<>();
     FilteredList<AccountDetailedReport> filteredObjects;
@@ -34,21 +32,19 @@ public class DetailedReportController {
     private TextField aType,bID,aID,oD,mName;
     @FXML
     private TableColumn<AccountDetailedReport, String> name,opDate,accType,accID,branch;
-//    @FXML
-//    private TableColumn<Account,Number> accID,branch;
     @FXML
     private Button reset,removeColumnButton,addColumnButton;
 
     public void initialize() {
-        name.setCellValueFactory(new PropertyValueFactory("merchantName"));
+        name.setCellValueFactory(new PropertyValueFactory<>("merchantName"));
         name.setStyle("-fx-alignment: CENTER;");
-        accID.setCellValueFactory(new PropertyValueFactory("accountId"));
+        accID.setCellValueFactory(new PropertyValueFactory<>("accountId"));
         accID.setStyle("-fx-alignment: CENTER;");
-        opDate.setCellValueFactory(new PropertyValueFactory("date"));
+        opDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         opDate.setStyle("-fx-alignment: CENTER;");
-        accType.setCellValueFactory(new PropertyValueFactory("accountType"));
+        accType.setCellValueFactory(new PropertyValueFactory<>("accountType"));
         accType.setStyle("-fx-alignment: CENTER;");
-        branch.setCellValueFactory(new PropertyValueFactory("branchID"));
+        branch.setCellValueFactory(new PropertyValueFactory<>("branchID"));
         branch.setStyle("-fx-alignment: CENTER;");
 
 //        table.setItems(accounts);
@@ -65,10 +61,12 @@ public class DetailedReportController {
         columnRemover.setItems(removableList);
 
         removeColumnButton.setOnAction((actionEvent -> {
-            table.getColumns().remove(columnsMap.get(columnRemover.getSelectionModel().getSelectedItem()));
-            canBeAdded.getItems().add(columnRemover.getValue());
-            removableList.remove(columnRemover.getSelectionModel().getSelectedItem());
-            columnRemover.setItems(removableList);
+            if(columnRemover.getValue()!=null){
+                table.getColumns().remove(columnsMap.get(columnRemover.getSelectionModel().getSelectedItem()));
+                canBeAdded.getItems().add(columnRemover.getValue());
+                removableList.remove(columnRemover.getSelectionModel().getSelectedItem());
+                columnRemover.setItems(removableList);
+            }
         }));
 
         addColumnButton.setOnAction((actionEvent -> {
@@ -87,29 +85,6 @@ public class DetailedReportController {
             mName.setText("");
             oD.setText("");
         }));
-
-//        aID.textProperty().addListener(((observableValue, old, newVal) -> {
-////            if(aID.getText()!=null && onlyDigits(aID.getText(),aID.getText().length())){
-//            filteredObjects.setPredicate(account -> {
-//                if(aID.getText()!=null && onlyDigits(aID.getText(),aID.getText().length())){
-//                    return account.getAccountType().toLowerCase().contains(aType.getText().toLowerCase()) &&
-//                            account.getAccountId().equals(Integer.parseInt(aID.getText())) &&
-//                            account.getMerchantName().toLowerCase().contains(mName.getText().toLowerCase()) &&
-//                            account.getDate().toLowerCase().contains(oD.getText().toLowerCase());
-//                }
-//                return true;
-//            });
-////            }
-//        }));
-//        bID.textProperty().addListener(((observableValue, old, newVal) -> {
-////            if(aID.getText()!=null && onlyDigits(aID.getText(),aID.getText().length())){
-//            filteredObjects.setPredicate(account -> bID.getText() != null && onlyDigits(bID.getText(), bID.getText().length()));
-//            sortedObjects = new SortedList<>(filteredObjects);
-//            sortedObjects.comparatorProperty().bind(table.comparatorProperty());
-//            table.setItems(sortedObjects);
-//        }));
-
-
         filteredObjects.predicateProperty().bind(Bindings.createObjectBinding(() ->
                         Account->
                                 Account.getAccountType().toLowerCase().contains(aType.getText().toLowerCase()) &&

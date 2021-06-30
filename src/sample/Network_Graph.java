@@ -53,194 +53,214 @@ public class Network_Graph extends Network{
                 Period pd = Period.between(fromDate,toDate);
                 System.out.println(pd.getDays()+" "+ pd.getMonths()+" "+ pd.getYears());
                 final String s = "Number of Accounts in date range: " + fromDate.toString().substring(0, 10) + " and " + toDate.toString().substring(0, 10);
-                if(period.getValue().equals("Monthly")){ //for months
-                    CategoryAxis x = new CategoryAxis();
-                    x.setLabel("Month Number");
-                    NumberAxis y = new NumberAxis();
-                    y.setLabel("No. of Accounts");
-                    XYChart.Series dataSeries = new XYChart.Series();
-                    dataSeries.setName(s);
-                    ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
-                    seriesArr.add(dataSeries);
-                    SqlQuery query = new SqlQuery();
-                    int max = Integer.MIN_VALUE;
-                    if(network.getValue().equals("All Networks")){
-                        StringBuilder tempQ = new StringBuilder("SELECT extract(month from Opening_date) as MONTH, count(*) as COUNT\n" +
-                                "FROM accounts where branch_id in\n" +
-                                "    (select branch_id from branches where ro_id in \n" +
-                                "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id = ");
-                        for(int i=0;i<netList.size();i++){
-                            tempQ.append(netMap.get(netList.get(i)));
-                            if(i!=netList.size()-1)
-                                tempQ.append(" or network_id = ");
-                        }
-                        tempQ.append("))) and opening_date between '").append(myDateFormat.format(fromDate)).append("' and '")
-                                .append(myDateFormat.format(toDate)).append("'\n")
-                                .append("GROUP BY extract(month from Opening_date)\n").append("order by MONTH asc");
-                        query.setQuery(tempQ.toString());
-                        System.out.println(query.getQuery());
-                        ResultSet rs = query.sql();
-                        while (rs.next()) {
-                            max = Math.max(max, rs.getInt("COUNT"));
-                            final XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString("MONTH"), rs.getInt("COUNT"));
-                            data.nodeProperty().addListener((ov, oldNode, node) -> {
-                                if (node != null)
-                                    displayLabelForData(data);
-                            });
-                            dataSeries.getData().add(data);
-                        }
-                    }else {
-                        query.setQuery("SELECT extract(month from Opening_date) as MONTH, count(*) as COUNT\n" +
-                                "FROM accounts where branch_id in\n" +
-                                "    (select branch_id from branches where ro_id in \n" +
-                                "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id = " +
-                                (netMap.get(network.getValue())) + "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
-                                + myDateFormat.format(toDate) + "'\n" +
-                                "GROUP BY extract(month from Opening_date)\n" +
-                                "order by MONTH asc");
-                        System.out.println(query.getQuery());
-                        ResultSet rs = query.sql();
-                        while (rs.next()) {
-                            max = Math.max(max, rs.getInt("COUNT"));
-                            final XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString("MONTH"), rs.getInt("COUNT"));
-                            data.nodeProperty().addListener((ov, oldNode, node) -> {
-                                if (node != null) {
-                                    displayLabelForData(data);
-                                }
-                            });
-                            dataSeries.getData().add(data);
-                        }
-                    }
-                    BarGraphController graphController = new BarGraphController(x,y,seriesArr,max,"Month Number","Number of Accounts");
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
-                    fxmlLoader.setController(graphController);
-                    Parent root1 = fxmlLoader.load();
-                    Stage stage = new Stage();
-                    stage.setTitle(network.getValue()+" Detailed Report Graph");
-                    stage.setScene(new Scene(root1,425,712));
-                    stage.show();
-                }
-                else if(period.getValue().equals("Weekly")){// for weekwise
-                    CategoryAxis x = new CategoryAxis();
-                    x.setLabel("Week Number");
-                    NumberAxis y = new NumberAxis();
-                    y.setLabel("No. of Accounts");
-                    XYChart.Series dataSeries = new XYChart.Series();
-                    dataSeries.setName(s);
-                    ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
-                    seriesArr.add(dataSeries);
-                    int max = Integer.MIN_VALUE;
-                    SqlQuery query = new SqlQuery();
-                    if(network.getValue().equals("All Networks")){
-                        StringBuilder tempQ = new StringBuilder("select to_char(opening_date, 'IW') as WEEK, count(Account_Id) as COUNT\n" +
-                                "from accounts where branch_id in\n" +
-                                "    (select branch_id from branches where ro_id in \n" +
-                                "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id = ");
-                        for(int i=0;i<netList.size();i++){
-                            tempQ.append(netMap.get(netList.get(i)));
-                            if(i!=netList.size()-1)
-                                tempQ.append(" or network_id = ");
-                        }
-                        tempQ.append("))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
-                                + myDateFormat.format(toDate) + "'\n" +
-                                "group by to_char(opening_date, 'IW')");
-                        query.setQuery(tempQ.toString());
-                        ResultSet rs = query.sql();
-                        int cnt = 1;
-                        while (rs.next()) {
-                            max = Math.max(max, rs.getInt("COUNT"));
-                            //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
-                            final XYChart.Data<String, Number> data = new XYChart.Data<>("" + cnt++, rs.getInt("COUNT"));
-                            data.nodeProperty().addListener((ov, oldNode, node) -> {
-                                if (node != null) {
-                                    displayLabelForData(data);
-                                }
-                            });
-                            dataSeries.getData().add(data);
-                        }
-                        BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Week Number", "Number of Accounts");
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
-                        fxmlLoader.setController(graphController);
-                        Parent root1 = fxmlLoader.load();
-                        Stage stage = new Stage();
-                        stage.setTitle(network.getValue() + " Detailed Report Graph");
-                        stage.setScene(new Scene(root1, 425, 712));
-                        stage.show();
-                    }else {
-                        query.setQuery("select to_char(opening_date, 'IW') as WEEK, count(Account_Id) as COUNT\n" +
-                                "from accounts where branch_id in\n" +
-                                "    (select branch_id from branches where ro_id in \n" +
-                                "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id in = " +
-                                (netMap.get(network.getValue())) + "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
-                                + myDateFormat.format(toDate) + "'\n" +
-                                "group by to_char(opening_date, 'IW')");
-                        System.out.println(query.getQuery());
-                        ResultSet rs = query.sql();
-                        int cnt = 1;
-                        while (rs.next()) {
-                            max = Math.max(max, rs.getInt("COUNT"));
-                            final XYChart.Data<String, Number> data = new XYChart.Data<>("" + cnt++, rs.getInt("COUNT"));
-                            data.nodeProperty().addListener((ov, oldNode, node) -> {
-                                if (node != null) {
-                                    displayLabelForData(data);
-                                }
-                            });
-                            dataSeries.getData().add(data);
-                        }
-                        BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Week Number", "Number of Accounts");
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
-                        fxmlLoader.setController(graphController);
-                        Parent root1 = fxmlLoader.load();
-                        Stage stage = new Stage();
-                        stage.setTitle(network.getValue() + " Detailed Report Graph");
-                        stage.setScene(new Scene(root1, 425, 712));
-                        stage.show();
-                    }
-                }
-                else if(period.getValue().equals("Daily")){//for daywise
-                    CategoryAxis x = new CategoryAxis();
-                    x.setLabel("Date");
-                    NumberAxis y = new NumberAxis();
-                    y.setLabel("No. of Accounts");
-                    XYChart.Series dataSeries = new XYChart.Series();
-                    dataSeries.setName(s);
-                    ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
-                    seriesArr.add(dataSeries);
-                    SqlQuery query = new SqlQuery();
-                    if (network.getValue().equals("All Networks")){
-                        StringBuilder tempQ = new StringBuilder("SELECT extract(year from opening_date) as YY, extract(month from opening_date) as MM, \n" +
-                                "extract(day from opening_date) as DD, count(*) as COUNT\n" +
-                                "FROM accounts where branch_id in\n" +
-                                "    (select branch_id from branches where ro_id in \n" +
-                                "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id = ");
-                        for(int i=0;i<netList.size();i++){
-                            tempQ.append(netMap.get(netList.get(i)));
-                            if(i!=netList.size()-1)
-                                tempQ.append(" or network_id = ");
-                        }
-                        tempQ.append("\n))) and opening_date between '").append(myDateFormat.format(fromDate))
-                                .append("' and '").append(myDateFormat.format(toDate)).append("'\n")
-                                .append("GROUP BY extract(year from opening_date), extract(month from opening_date), \n")
-                                .append("extract(day from opening_date)\n").append("order by yy asc\n");
-                        System.out.println(tempQ);
-                        query.setQuery(tempQ.toString());
-                        ResultSet rs = query.sql();
+                switch (period.getValue()) {
+                    case "Monthly" -> { //for months
+                        CategoryAxis x = new CategoryAxis();
+                        x.setLabel("Month Number");
+                        NumberAxis y = new NumberAxis();
+                        y.setLabel("No. of Accounts");
+                        XYChart.Series dataSeries = new XYChart.Series();
+                        dataSeries.setName(s);
+                        ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
+                        seriesArr.add(dataSeries);
+                        SqlQuery query = new SqlQuery();
                         int max = Integer.MIN_VALUE;
-                        while (rs.next()) {
-                            max = Math.max(max, rs.getInt("COUNT"));
-                            String d = rs.getString("DD") + "-" + rs.getString("MM") + "-" + rs.getString("YY");
-                            final XYChart.Data<String, Number> data = new XYChart.Data<>(d, rs.getInt("COUNT"));
-                            data.nodeProperty().addListener((ov, oldNode, node) -> {
-                                if (node != null) {
-                                    displayLabelForData(data);
-                                }
-                            });
-                            dataSeries.getData().add(data);
+                        if (network.getValue().equals("All Networks")) {
+                            StringBuilder tempQ = new StringBuilder("SELECT extract(month from Opening_date) as MONTH, count(*) as COUNT\n" +
+                                    "FROM accounts where branch_id in\n" +
+                                    "    (select branch_id from branches where ro_id in \n" +
+                                    "            (select ro_id from ro where module_id in \n" +
+                                    "                (select module_id from modules where network_id = ");
+                            for (int i = 0; i < netList.size(); i++) {
+                                tempQ.append(netMap.get(netList.get(i)));
+                                if (i != netList.size() - 1)
+                                    tempQ.append(" or network_id = ");
+                            }
+                            tempQ.append("))) and opening_date between '").append(myDateFormat.format(fromDate)).append("' and '")
+                                    .append(myDateFormat.format(toDate)).append("'\n")
+                                    .append("GROUP BY extract(month from Opening_date)\n").append("order by MONTH asc");
+                            query.setQuery(tempQ.toString());
+                            System.out.println(query.getQuery());
+                            ResultSet rs = query.sql();
+                            while (rs.next()) {
+                                max = Math.max(max, rs.getInt("COUNT"));
+                                final XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString("MONTH"), rs.getInt("COUNT"));
+                                data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                    if (node != null)
+                                        displayLabelForData(data);
+                                });
+                                dataSeries.getData().add(data);
+                            }
+                        } else {
+                            query.setQuery("SELECT extract(month from Opening_date) as MONTH, count(*) as COUNT\n" +
+                                    "FROM accounts where branch_id in\n" +
+                                    "    (select branch_id from branches where ro_id in \n" +
+                                    "            (select ro_id from ro where module_id in \n" +
+                                    "                (select module_id from modules where network_id = " +
+                                    (netMap.get(network.getValue())) + "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                    + myDateFormat.format(toDate) + "'\n" +
+                                    "GROUP BY extract(month from Opening_date)\n" +
+                                    "order by MONTH asc");
+                            System.out.println(query.getQuery());
+                            ResultSet rs = query.sql();
+                            while (rs.next()) {
+                                max = Math.max(max, rs.getInt("COUNT"));
+                                final XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString("MONTH"), rs.getInt("COUNT"));
+                                data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                    if (node != null) {
+                                        displayLabelForData(data);
+                                    }
+                                });
+                                dataSeries.getData().add(data);
+                            }
+                        }
+                        BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Month Number", "Number of Accounts");
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
+                        fxmlLoader.setController(graphController);
+                        Parent root1 = fxmlLoader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle(network.getValue() + " Detailed Report Graph");
+                        stage.setScene(new Scene(root1, 425, 712));
+                        stage.show();
+                    }
+                    case "Weekly" -> {// for weekwise
+                        CategoryAxis x = new CategoryAxis();
+                        x.setLabel("Week Number");
+                        NumberAxis y = new NumberAxis();
+                        y.setLabel("No. of Accounts");
+                        XYChart.Series dataSeries = new XYChart.Series();
+                        dataSeries.setName(s);
+                        ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
+                        seriesArr.add(dataSeries);
+                        int max = Integer.MIN_VALUE;
+                        SqlQuery query = new SqlQuery();
+                        if (network.getValue().equals("All Networks")) {
+                            StringBuilder tempQ = new StringBuilder("select to_char(opening_date, 'IW') as WEEK, count(Account_Id) as COUNT\n" +
+                                    "from accounts where branch_id in\n" +
+                                    "    (select branch_id from branches where ro_id in \n" +
+                                    "            (select ro_id from ro where module_id in \n" +
+                                    "                (select module_id from modules where network_id = ");
+                            for (int i = 0; i < netList.size(); i++) {
+                                tempQ.append(netMap.get(netList.get(i)));
+                                if (i != netList.size() - 1)
+                                    tempQ.append(" or network_id = ");
+                            }
+                            tempQ.append("))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                    + myDateFormat.format(toDate) + "'\n" +
+                                    "group by to_char(opening_date, 'IW')");
+                            query.setQuery(tempQ.toString());
+                            ResultSet rs = query.sql();
+                            int cnt = 1;
+                            while (rs.next()) {
+                                max = Math.max(max, rs.getInt("COUNT"));
+                                //                    System.out.println(rs.getString("MONTH")+" "+rs.getInt("COUNT"));
+                                final XYChart.Data<String, Number> data = new XYChart.Data<>("" + cnt++, rs.getInt("COUNT"));
+                                data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                    if (node != null) {
+                                        displayLabelForData(data);
+                                    }
+                                });
+                                dataSeries.getData().add(data);
+                            }
+                        } else {
+                            query.setQuery("select to_char(opening_date, 'IW') as WEEK, count(Account_Id) as COUNT\n" +
+                                    "from accounts where branch_id in\n" +
+                                    "    (select branch_id from branches where ro_id in \n" +
+                                    "            (select ro_id from ro where module_id in \n" +
+                                    "                (select module_id from modules where network_id in = " +
+                                    (netMap.get(network.getValue())) + "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                    + myDateFormat.format(toDate) + "'\n" +
+                                    "group by to_char(opening_date, 'IW')");
+                            System.out.println(query.getQuery());
+                            ResultSet rs = query.sql();
+                            int cnt = 1;
+                            while (rs.next()) {
+                                max = Math.max(max, rs.getInt("COUNT"));
+                                final XYChart.Data<String, Number> data = new XYChart.Data<>("" + cnt++, rs.getInt("COUNT"));
+                                data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                    if (node != null) {
+                                        displayLabelForData(data);
+                                    }
+                                });
+                                dataSeries.getData().add(data);
+                            }
+                        }
+                        BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Week Number", "Number of Accounts");
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
+                        fxmlLoader.setController(graphController);
+                        Parent root1 = fxmlLoader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle(network.getValue() + " Detailed Report Graph");
+                        stage.setScene(new Scene(root1, 425, 712));
+                        stage.show();
+                    }
+                    case "Daily" -> {//for daywise
+                        CategoryAxis x = new CategoryAxis();
+                        x.setLabel("Date");
+                        NumberAxis y = new NumberAxis();
+                        y.setLabel("No. of Accounts");
+                        XYChart.Series dataSeries = new XYChart.Series();
+                        int max = Integer.MIN_VALUE;
+                        dataSeries.setName(s);
+                        ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
+                        seriesArr.add(dataSeries);
+                        SqlQuery query = new SqlQuery();
+                        if (network.getValue().equals("All Networks")) {
+                            StringBuilder tempQ = new StringBuilder("SELECT extract(year from opening_date) as YY, extract(month from opening_date) as MM, \n" +
+                                    "extract(day from opening_date) as DD, count(*) as COUNT\n" +
+                                    "FROM accounts where branch_id in\n" +
+                                    "    (select branch_id from branches where ro_id in \n" +
+                                    "            (select ro_id from ro where module_id in \n" +
+                                    "                (select module_id from modules where network_id = ");
+                            for (int i = 0; i < netList.size(); i++) {
+                                tempQ.append(netMap.get(netList.get(i)));
+                                if (i != netList.size() - 1)
+                                    tempQ.append(" or network_id = ");
+                            }
+                            tempQ.append("\n))) and opening_date between '").append(myDateFormat.format(fromDate))
+                                    .append("' and '").append(myDateFormat.format(toDate)).append("'\n")
+                                    .append("GROUP BY extract(year from opening_date), extract(month from opening_date), \n")
+                                    .append("extract(day from opening_date)\n").append("order by yy asc\n");
+                            System.out.println(tempQ);
+                            query.setQuery(tempQ.toString());
+                            ResultSet rs = query.sql();
+                            while (rs.next()) {
+                                max = Math.max(max, rs.getInt("COUNT"));
+                                String d = rs.getString("DD") + "-" + rs.getString("MM") + "-" + rs.getString("YY");
+                                final XYChart.Data<String, Number> data = new XYChart.Data<>(d, rs.getInt("COUNT"));
+                                data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                    if (node != null) {
+                                        displayLabelForData(data);
+                                    }
+                                });
+                                dataSeries.getData().add(data);
+                            }
+                        } else {
+                            query.setQuery("SELECT extract(year from opening_date) as YY, extract(month from opening_date) as MM, \n" +
+                                    "extract(day from opening_date) as DD, count(*) as COUNT\n" +
+                                    "FROM accounts where branch_id in\n" +
+                                    "    (select branch_id from branches where ro_id in \n" +
+                                    "            (select ro_id from ro where module_id in \n" +
+                                    "                (select module_id from modules where network_id = " +
+                                    (netMap.get(network.getValue())) +
+                                    "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                    + myDateFormat.format(toDate) +
+                                    "GROUP BY extract(year from opening_date), extract(month from opening_date), \n" +
+                                    "extract(day from opening_date)\n" +
+                                    "order by yy asc");
+                            System.out.println(query.getQuery());
+                            ResultSet rs = query.sql();
+                            while (rs.next()) {
+                                max = Math.max(max, rs.getInt("COUNT"));
+                                String d = rs.getString("DD") + "-" + rs.getString("MM") + "-" + rs.getString("YY");
+                                final XYChart.Data<String, Number> data = new XYChart.Data<>(d, rs.getInt("COUNT"));
+                                data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                    if (node != null) {
+                                        displayLabelForData(data);
+                                    }
+                                });
+                                dataSeries.getData().add(data);
+                            }
                         }
                         BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Date", "Number of Accounts");
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
@@ -250,32 +270,225 @@ public class Network_Graph extends Network{
                         stage.setTitle(network.getValue() + " Detailed Report Graph");
                         stage.setScene(new Scene(root1, 425, 712));
                         stage.show();
-                    }else {
-                        query.setQuery("SELECT extract(year from opening_date) as YY, extract(month from opening_date) as MM, \n" +
-                                "extract(day from opening_date) as DD, count(*) as COUNT\n" +
-                                "FROM accounts where branch_id in\n" +
-                                "    (select branch_id from branches where ro_id in \n" +
-                                "            (select ro_id from ro where module_id in \n" +
-                                "                (select module_id from modules where network_id = " +
-                                (netMap.get(network.getValue())) +
-                                "))) and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
-                                + myDateFormat.format(toDate) +
-                                "GROUP BY extract(year from opening_date), extract(month from opening_date), \n" +
-                                "extract(day from opening_date)\n" +
-                                "order by yy asc");
-                        System.out.println(query.getQuery());
-                        ResultSet rs = query.sql();
+                    }
+                }
+            }else if(type.getSelectionModel().getSelectedIndex()==1){
+                Period pd = Period.between(fromDate,toDate);
+                System.out.println(pd.getDays()+" "+ pd.getMonths()+" "+ pd.getYears());
+                switch (period.getValue()) {
+                    case "Monthly" -> { //for months
+                        CategoryAxis x = new CategoryAxis();
+                        x.setLabel("Month Number");
+                        NumberAxis y = new NumberAxis();
+                        y.setLabel("No. of Accounts");
+                        ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
                         int max = Integer.MIN_VALUE;
-                        while (rs.next()) {
-                            max = Math.max(max, rs.getInt("COUNT"));
-                            String d = rs.getString("DD") + "-" + rs.getString("MM") + "-" + rs.getString("YY");
-                            final XYChart.Data<String, Number> data = new XYChart.Data<>(d, rs.getInt("COUNT"));
-                            data.nodeProperty().addListener((ov, oldNode, node) -> {
-                                if (node != null) {
-                                    displayLabelForData(data);
+                        for (String acc : Main.accountType) {
+                            XYChart.Series dataSeries = new XYChart.Series();
+                            dataSeries.setName(acc);
+                            seriesArr.add(dataSeries);
+                            SqlQuery query = new SqlQuery();
+                            if (network.getValue().equals("All Networks")) {
+                                StringBuilder tempQ = new StringBuilder("SELECT extract(month from Opening_date) as MONTH, count(*) as COUNT\n" +
+                                        "FROM accounts where branch_id in\n" +
+                                        "    (select branch_id from branches where ro_id in \n" +
+                                        "            (select ro_id from ro where module_id in \n" +
+                                        "                (select module_id from modules where network_id = ");
+                                for (int i = 0; i < netList.size(); i++) {
+                                    tempQ.append(netMap.get(netList.get(i)));
+                                    if (i != netList.size() - 1)
+                                        tempQ.append(" or network_id = ");
                                 }
-                            });
-                            dataSeries.getData().add(data);
+                                tempQ.append("))) and account_type = '").append(acc).append("' and opening_date between '").append(myDateFormat.format(fromDate)).append("' and '")
+                                        .append(myDateFormat.format(toDate)).append("'\n")
+                                        .append("GROUP BY extract(month from Opening_date)\n").append("order by MONTH asc");
+                                query.setQuery(tempQ.toString());
+                                System.out.println(query.getQuery());
+                                ResultSet rs = query.sql();
+                                while (rs.next()) {
+                                    max = Math.max(max, rs.getInt("COUNT"));
+                                    final XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString("MONTH"), rs.getInt("COUNT"));
+                                    data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                        if (node != null)
+                                            displayLabelForData(data);
+                                    });
+                                    dataSeries.getData().add(data);
+                                }
+                            } else {
+                                query.setQuery("SELECT extract(month from Opening_date) as MONTH, count(*) as COUNT\n" +
+                                        "FROM accounts where branch_id in\n" +
+                                        "    (select branch_id from branches where ro_id in \n" +
+                                        "            (select ro_id from ro where module_id in \n" +
+                                        "                (select module_id from modules where network_id = " +
+                                        (netMap.get(network.getValue())) + "))) and account_type = '" + acc + "' and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                        + myDateFormat.format(toDate) + "'\n" +
+                                        "GROUP BY extract(month from Opening_date)\n" +
+                                        "order by MONTH asc");
+                                System.out.println(query.getQuery());
+                                ResultSet rs = query.sql();
+                                while (rs.next()) {
+                                    max = Math.max(max, rs.getInt("COUNT"));
+                                    final XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString("MONTH"), rs.getInt("COUNT"));
+                                    data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                        if (node != null) {
+                                            displayLabelForData(data);
+                                        }
+                                    });
+                                    dataSeries.getData().add(data);
+                                }
+                            }
+                        }
+                        BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Month Number", "Number of Accounts");
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
+                        fxmlLoader.setController(graphController);
+                        Parent root1 = fxmlLoader.load();
+                        Stage stage = new Stage();
+                        stage.setTitle(network.getValue() + " Detailed Report Graph");
+                        stage.setScene(new Scene(root1, 425, 712));
+                        stage.show();
+                    }
+                    case "Weekly" -> {// for weekwise
+                        CategoryAxis x = new CategoryAxis();
+                        x.setLabel("Week Number");
+                        NumberAxis y = new NumberAxis();
+                        y.setLabel("No. of Accounts");
+                        int max = Integer.MIN_VALUE;
+                        ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
+
+                        for (String acc : Main.accountType) {
+                            XYChart.Series dataSeries = new XYChart.Series();
+                            dataSeries.setName(acc);
+                            seriesArr.add(dataSeries);
+                            SqlQuery query = new SqlQuery();
+                            if (network.getValue().equals("All Networks")) {
+                                StringBuilder tempQ = new StringBuilder("select to_char(opening_date, 'IW') as WEEK, count(Account_Id) as COUNT\n" +
+                                        "from accounts where branch_id in\n" +
+                                        "    (select branch_id from branches where ro_id in \n" +
+                                        "            (select ro_id from ro where module_id in \n" +
+                                        "                (select module_id from modules where network_id = ");
+                                for (int i = 0; i < netList.size(); i++) {
+                                    tempQ.append(netMap.get(netList.get(i)));
+                                    if (i != netList.size() - 1)
+                                        tempQ.append(" or network_id = ");
+                                }
+                                tempQ.append("))) and account_type = '" + acc + "' and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                        + myDateFormat.format(toDate) + "'\n" +
+                                        "group by to_char(opening_date, 'IW')");
+                                query.setQuery(tempQ.toString());
+                                ResultSet rs = query.sql();
+                                int cnt = 1;
+                                while (rs.next()) {
+                                    max = Math.max(max, rs.getInt("COUNT"));
+                                    final XYChart.Data<String, Number> data = new XYChart.Data<>("" + cnt++, rs.getInt("COUNT"));
+                                    data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                        if (node != null) {
+                                            displayLabelForData(data);
+                                        }
+                                    });
+                                    dataSeries.getData().add(data);
+                                }
+                            } else {
+                                query.setQuery("select to_char(opening_date, 'IW') as WEEK, count(Account_Id) as COUNT\n" +
+                                        "from accounts where branch_id in\n" +
+                                        "    (select branch_id from branches where ro_id in \n" +
+                                        "            (select ro_id from ro where module_id in \n" +
+                                        "                (select module_id from modules where network_id in = " +
+                                        (netMap.get(network.getValue())) + "))) and account_type = '" + acc + "' and opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                        + myDateFormat.format(toDate) + "'\n" +
+                                        "group by to_char(opening_date, 'IW')");
+                                System.out.println(query.getQuery());
+                                ResultSet rs = query.sql();
+                                int cnt = 1;
+                                while (rs.next()) {
+                                    max = Math.max(max, rs.getInt("COUNT"));
+                                    final XYChart.Data<String, Number> data = new XYChart.Data<>("" + cnt++, rs.getInt("COUNT"));
+                                    data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                        if (node != null) {
+                                            displayLabelForData(data);
+                                        }
+                                    });
+                                    dataSeries.getData().add(data);
+                                }
+                            }
+                        }
+                            BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Week Number", "Number of Accounts");
+                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));
+                            fxmlLoader.setController(graphController);
+                            Parent root1 = fxmlLoader.load();
+                            Stage stage = new Stage();
+                            stage.setTitle(network.getValue() + " Detailed Report Graph");
+                            stage.setScene(new Scene(root1, 425, 712));
+                            stage.show();
+                    }
+                    case "Daily" -> {//for daywise
+                        CategoryAxis x = new CategoryAxis();
+                        x.setLabel("Date");
+                        NumberAxis y = new NumberAxis();
+                        y.setLabel("No. of Accounts");
+                        ArrayList<XYChart.Series> seriesArr = new ArrayList<>();
+                        int max = Integer.MIN_VALUE;
+                        for (String acc : Main.accountType) {
+                            XYChart.Series dataSeries = new XYChart.Series();
+                            dataSeries.setName(acc);
+                            seriesArr.add(dataSeries);
+                            SqlQuery query = new SqlQuery();
+                            if (network.getValue().equals("All Networks")) {
+                                StringBuilder tempQ = new StringBuilder("SELECT extract(year from opening_date) as YY, extract(month from opening_date) as MM, \n" +
+                                        "extract(day from opening_date) as DD, count(*) as COUNT\n" +
+                                        "FROM accounts where branch_id in\n" +
+                                        "    (select branch_id from branches where ro_id in \n" +
+                                        "            (select ro_id from ro where module_id in \n" +
+                                        "                (select module_id from modules where network_id = ");
+                                for (int i = 0; i < netList.size(); i++) {
+                                    tempQ.append(netMap.get(netList.get(i)));
+                                    if (i != netList.size() - 1)
+                                        tempQ.append(" or network_id = ");
+                                }
+                                tempQ.append("\n))) and account_type = '").append(acc).append("' and opening_date between '").append(myDateFormat.format(fromDate))
+                                        .append("' and '").append(myDateFormat.format(toDate)).append("'\n")
+                                        .append("GROUP BY extract(year from opening_date), extract(month from opening_date), \n")
+                                        .append("extract(day from opening_date)\n").append("order by yy asc\n");
+                                System.out.println(tempQ);
+                                query.setQuery(tempQ.toString());
+                                ResultSet rs = query.sql();
+                                while (rs.next()) {
+                                    max = Math.max(max, rs.getInt("COUNT"));
+                                    String d = rs.getString("DD") + "-" + rs.getString("MM") + "-" + rs.getString("YY");
+                                    final XYChart.Data<String, Number> data = new XYChart.Data<>(d, rs.getInt("COUNT"));
+                                    data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                        if (node != null) {
+                                            displayLabelForData(data);
+                                        }
+                                    });
+                                    dataSeries.getData().add(data);
+                                }
+                            } else {
+                                query.setQuery("SELECT extract(year from opening_date) as YY, extract(month from opening_date) as MM, \n" +
+                                        "extract(day from opening_date) as DD, count(*) as COUNT\n" +
+                                        "FROM accounts where branch_id in\n" +
+                                        "    (select branch_id from branches where ro_id in \n" +
+                                        "            (select ro_id from ro where module_id in \n" +
+                                        "                (select module_id from modules where network_id = " +
+                                        (netMap.get(network.getValue())) +
+                                        "))) and account_type = '" + acc + "' opening_date between '" + myDateFormat.format(fromDate) + "' and '"
+                                        + myDateFormat.format(toDate) +
+                                        "GROUP BY extract(year from opening_date), extract(month from opening_date), \n" +
+                                        "extract(day from opening_date)\n" +
+                                        "order by yy asc");
+                                System.out.println(query.getQuery());
+                                ResultSet rs = query.sql();
+                                while (rs.next()) {
+                                    max = Math.max(max, rs.getInt("COUNT"));
+                                    String d = rs.getString("DD") + "-" + rs.getString("MM") + "-" + rs.getString("YY");
+                                    final XYChart.Data<String, Number> data = new XYChart.Data<>(d, rs.getInt("COUNT"));
+                                    data.nodeProperty().addListener((ov, oldNode, node) -> {
+                                        if (node != null) {
+                                            displayLabelForData(data);
+                                        }
+                                    });
+                                    dataSeries.getData().add(data);
+                                }
+                            }
                         }
                         BarGraphController graphController = new BarGraphController(x, y, seriesArr, max, "Date", "Number of Accounts");
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxmls/graphs/BarGraph.fxml"));

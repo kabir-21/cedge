@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Branch_Report extends Branch {
-
     @Override
     protected void getSummary(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {
         LocalDate fromDate = from.getValue();
