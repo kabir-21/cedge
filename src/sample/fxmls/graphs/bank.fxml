@@ -6,18 +6,19 @@
 
 <AnchorPane prefHeight="180.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Bank_Graph">
     <children>
-        <ComboBox fx:id="bank" layoutX="234.0" layoutY="53.0" prefWidth="150.0" />
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="24.0" prefHeight="29.0" prefWidth="152.0" text="Choose Bank" textAlignment="CENTER" />
-        <Button fx:id="summary" layoutX="311.0" layoutY="190.0" mnemonicParsing="false" onAction="#getSummary" prefHeight="34.0" prefWidth="170.0" text="Get Summary Chart" />
-        <Button fx:id="report" layoutX="520.0" layoutY="190.0" mnemonicParsing="false" onAction="#getReport" prefHeight="34.0" prefWidth="170.0" text="Get Detailed Chart" />
+        <ComboBox fx:id="bank" layoutX="169.0" layoutY="53.0" prefWidth="150.0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="168.0" layoutY="24.0" prefHeight="29.0" prefWidth="152.0" text="Choose Bank" textAlignment="CENTER" />
+        <Button fx:id="summary" layoutX="415.0" layoutY="191.0" mnemonicParsing="false" onAction="#getPlot" prefHeight="34.0" prefWidth="170.0" text="Get Plot" />
         <DatePicker fx:id="from" layoutX="362.0" layoutY="137.0" prefHeight="31.0" prefWidth="119.0" />
         <DatePicker fx:id="to" layoutX="520.0" layoutY="137.0" prefHeight="31.0" prefWidth="119.0" />
         <Label alignment="CENTER" layoutX="367.0" layoutY="102.0" prefHeight="27.0" prefWidth="112.0" text="From Date" />
         <Label alignment="CENTER" layoutX="523.0" layoutY="102.0" prefHeight="27.0" prefWidth="112.0" text="To Date" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="427.0" layoutY="24.0" prefHeight="29.0" prefWidth="152.0" text="Choose Graph Type" textAlignment="CENTER" />
-      <ComboBox fx:id="type" layoutX="428.0" layoutY="53.0" prefWidth="150.0" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="614.0" layoutY="24.0" prefHeight="29.0" prefWidth="152.0" text="Choose Period" textAlignment="CENTER" />
-      <ComboBox fx:id="period" layoutX="615.0" layoutY="53.0" prefWidth="150.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="510.0" layoutY="24.0" prefHeight="29.0" prefWidth="152.0" text="Choose Parameter" textAlignment="CENTER" />
+      <ComboBox fx:id="type" layoutX="511.0" layoutY="53.0" onAction="#setPeriod" prefWidth="150.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="684.0" layoutY="24.0" prefHeight="29.0" prefWidth="152.0" text="Choose Period" textAlignment="CENTER" />
+      <ComboBox fx:id="period" layoutX="685.0" layoutY="53.0" prefWidth="150.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="339.0" layoutY="24.0" prefHeight="29.0" prefWidth="152.0" text="Choose Chart Type" textAlignment="CENTER" />
+      <ComboBox fx:id="chartType" layoutX="340.0" layoutY="53.0" onAction="#setParameters" prefWidth="150.0" />
     </children>
 
 </AnchorPane>

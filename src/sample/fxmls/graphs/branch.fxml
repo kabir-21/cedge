@@ -10,23 +10,24 @@
         <children>
             <ComboBox fx:id="circle" layoutX="9.0" layoutY="44.0" onAction="#setNetwork" prefWidth="150.0" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Circle" textAlignment="CENTER" />
-            <ComboBox fx:id="network" layoutX="184.0" layoutY="43.0" onAction="#setModule" prefWidth="150.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Network" textAlignment="CENTER" />
-            <ComboBox fx:id="module" layoutX="360.0" layoutY="43.0" onAction="#setRO" prefWidth="150.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="359.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Module" textAlignment="CENTER" />
-            <ComboBox fx:id="branch" layoutX="708.0" layoutY="43.0" prefWidth="150.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="707.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Branch" textAlignment="CENTER" />
-            <ComboBox fx:id="ro" layoutX="533.0" layoutY="43.0" onAction="#setBranch" prefWidth="150.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="532.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose RO" textAlignment="CENTER" />
-            <Label alignment="CENTER" layoutX="647.0" layoutY="87.0" prefHeight="27.0" prefWidth="112.0" text="To Date" />
-            <Label alignment="CENTER" layoutX="459.0" layoutY="87.0" prefHeight="27.0" prefWidth="112.0" text="From Date" />
-            <DatePicker fx:id="to" layoutX="644.0" layoutY="122.0" prefHeight="31.0" prefWidth="119.0" />
-            <DatePicker fx:id="from" layoutX="454.0" layoutY="122.0" prefHeight="31.0" prefWidth="119.0" />
-            <Button fx:id="report" layoutX="644.0" layoutY="168.0" mnemonicParsing="false" onAction="#getReport" prefHeight="34.0" prefWidth="170.0" text="Get Detailed Report" />
-            <Button fx:id="summary" layoutX="403.0" layoutY="168.0" mnemonicParsing="false" onAction="#getSummary" prefHeight="34.0" prefWidth="170.0" text="Get Summary Report" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="879.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Graph Type" textAlignment="CENTER" />
-      <ComboBox fx:id="type" layoutX="880.0" layoutY="43.0" prefWidth="150.0" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="1050.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Period" textAlignment="CENTER" />
-      <ComboBox fx:id="period" layoutX="1051.0" layoutY="43.0" prefWidth="150.0" />
+            <ComboBox fx:id="network" layoutX="173.0" layoutY="44.0" onAction="#setModule" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="172.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Network" textAlignment="CENTER" />
+            <ComboBox fx:id="module" layoutX="338.0" layoutY="44.0" onAction="#setRO" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="337.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Module" textAlignment="CENTER" />
+            <ComboBox fx:id="branch" layoutX="672.0" layoutY="44.0" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="671.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Branch" textAlignment="CENTER" />
+            <ComboBox fx:id="ro" layoutX="505.0" layoutY="44.0" onAction="#setBranch" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="504.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose RO" textAlignment="CENTER" />
+            <Label alignment="CENTER" layoutX="683.0" layoutY="89.0" prefHeight="27.0" prefWidth="112.0" text="To Date" />
+            <Label alignment="CENTER" layoutX="530.0" layoutY="89.0" prefHeight="27.0" prefWidth="112.0" text="From Date" />
+            <DatePicker fx:id="to" layoutX="680.0" layoutY="124.0" prefHeight="31.0" prefWidth="119.0" />
+            <DatePicker fx:id="from" layoutX="525.0" layoutY="124.0" prefHeight="31.0" prefWidth="119.0" />
+            <Button fx:id="summary" layoutX="578.0" layoutY="175.0" mnemonicParsing="false" onAction="#getPlot" prefHeight="34.0" prefWidth="170.0" text="Get Plot" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="1001.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Parameter" textAlignment="CENTER" />
+      <ComboBox fx:id="type" layoutX="1002.0" layoutY="44.0" onAction="#setPeriod" prefWidth="150.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="1172.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Period" textAlignment="CENTER" />
+      <ComboBox fx:id="period" layoutX="1173.0" layoutY="44.0" prefWidth="150.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="838.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Chart Type" textAlignment="CENTER" />
+      <ComboBox fx:id="chartType" layoutX="839.0" layoutY="44.0" onAction="#setParameters" prefWidth="150.0" />
         </children>
 </AnchorPane>

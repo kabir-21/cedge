@@ -21,7 +21,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxmls/Menu.fxml")));
         primaryStage.setTitle("C-EDGE");
-        primaryStage.setScene(new Scene(root, 1200, 330));
+        primaryStage.setScene(new Scene(root, 1500, 330));
         primaryStage.show();
     }
 

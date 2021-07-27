@@ -8,21 +8,22 @@
 
 <AnchorPane prefHeight="180.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Module_Graph">
         <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="237.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Network" textAlignment="CENTER" />
-            <ComboBox fx:id="network" layoutX="238.0" layoutY="43.0" onAction="#setModule" prefWidth="150.0" />
-            <ComboBox fx:id="circle" layoutX="48.0" layoutY="44.0" onAction="#setNetwork" prefWidth="150.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="47.0" layoutY="15.0" prefHeight="29.0" prefWidth="152.0" text="Choose Circle" textAlignment="CENTER" />
-            <ComboBox fx:id="module" layoutX="428.0" layoutY="43.0" prefWidth="150.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="427.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Module" textAlignment="CENTER" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="165.0" layoutY="26.0" prefHeight="29.0" prefWidth="152.0" text="Choose Network" textAlignment="CENTER" />
+            <ComboBox fx:id="network" layoutX="166.0" layoutY="55.0" onAction="#setModule" prefWidth="150.0" />
+            <ComboBox fx:id="circle" layoutX="-3.0" layoutY="56.0" onAction="#setNetwork" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-4.0" layoutY="27.0" prefHeight="29.0" prefWidth="152.0" text="Choose Circle" textAlignment="CENTER" />
+            <ComboBox fx:id="module" layoutX="335.0" layoutY="55.0" prefWidth="150.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="334.0" layoutY="26.0" prefHeight="29.0" prefWidth="152.0" text="Choose Module" textAlignment="CENTER" />
             <Label alignment="CENTER" layoutX="518.0" layoutY="87.0" prefHeight="27.0" prefWidth="112.0" text="To Date" />
             <Label alignment="CENTER" layoutX="362.0" layoutY="87.0" prefHeight="27.0" prefWidth="112.0" text="From Date" />
             <DatePicker fx:id="to" layoutX="515.0" layoutY="122.0" prefHeight="31.0" prefWidth="119.0" />
             <DatePicker fx:id="from" layoutX="357.0" layoutY="122.0" prefHeight="31.0" prefWidth="119.0" />
-            <Button fx:id="report" layoutX="516.0" layoutY="175.0" mnemonicParsing="false" onAction="#getReport" prefHeight="34.0" prefWidth="170.0" text="Get Detailed Report" />
-            <Button fx:id="summary" layoutX="306.0" layoutY="175.0" mnemonicParsing="false" onAction="#getSummary" prefHeight="34.0" prefWidth="170.0" text="Get Summary Report" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="619.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Graph Type" textAlignment="CENTER" />
-      <ComboBox fx:id="type" layoutX="620.0" layoutY="43.0" prefWidth="150.0" />
-      <ComboBox fx:id="period" layoutX="803.0" layoutY="43.0" prefWidth="150.0" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="802.0" layoutY="14.0" prefHeight="29.0" prefWidth="152.0" text="Choose Period" textAlignment="CENTER" />
+            <Button fx:id="summary" layoutX="415.0" layoutY="175.0" mnemonicParsing="false" onAction="#getPlot" prefHeight="34.0" prefWidth="170.0" text="Get Plot" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="506.0" layoutY="26.0" prefHeight="29.0" prefWidth="152.0" text="Choose Chart Type" textAlignment="CENTER" />
+      <ComboBox fx:id="chartType" layoutX="507.0" layoutY="55.0" onAction="#setParameters" prefWidth="150.0" />
+      <ComboBox fx:id="period" layoutX="854.0" layoutY="55.0" prefWidth="150.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="853.0" layoutY="26.0" prefHeight="29.0" prefWidth="152.0" text="Choose Period" textAlignment="CENTER" />
+      <ComboBox fx:id="type" layoutX="680.0" layoutY="55.0" onAction="#setPeriod" prefWidth="150.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="679.0" layoutY="26.0" prefHeight="29.0" prefWidth="152.0" text="Choose Parameter" textAlignment="CENTER" />
         </children>
 </AnchorPane>
