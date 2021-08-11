@@ -47,7 +47,6 @@ public class DetailedReportController {
         branch.setCellValueFactory(new PropertyValueFactory<>("branchID"));
         branch.setStyle("-fx-alignment: CENTER;");
 
-//        table.setItems(accounts);
         filteredObjects = new FilteredList<>(accounts, p -> true);
         sortedObjects  = new SortedList<>(filteredObjects);
         sortedObjects.comparatorProperty().bind(table.comparatorProperty());

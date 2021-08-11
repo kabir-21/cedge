@@ -11,20 +11,14 @@ import javafx.scene.control.DatePicker;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-abstract class Circle implements Initializable {
+abstract class Circle extends Bank{//implements Initializable {
     protected ObservableList<String> circlesList = FXCollections.observableArrayList();
     protected HashMap<String,Integer> map = new HashMap<>();
-    protected DateTimeFormatter myDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     @FXML
     protected ComboBox<String> circle;
-    @FXML
-    protected DatePicker from,to;
-    @FXML
-    protected Button summary,report;
     @FXML
     protected void getSummary(ActionEvent event) throws SQLException, ClassNotFoundException, IOException {}
     @FXML

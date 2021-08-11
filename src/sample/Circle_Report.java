@@ -27,7 +27,8 @@ public class Circle_Report extends Circle {
         }else if(circle.getValue().equals("All Circles")){
             ObservableList<AccountSummaryReport> accounts = FXCollections.observableArrayList();
             SqlQuery q = new SqlQuery();
-            for(String s:circlesList){
+//            System.out.println("circl list: "+Main.circlesList);
+            for(String s:Main.circlesList){
                 String query = "select opening_date, count(*) from accounts where branch_id in\n" +
                         "    (select branch_id from branches where ro_id in\n" +
                         "        (select ro_id from ro where module_id in \n" +
